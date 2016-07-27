@@ -1,0 +1,12 @@
+<!DOCTYPE configuration PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type=""/>
+    </typeAliases>
+    <mappers>
+        <mapper resource="mybatis/mappers/QMessageMapper.xml"/>
+        <mapper resource="mybatis/mappers/N1RecordMapper.xml"/>
+        <mapper resource="mybatis/mappers/N2RecordMapper.xml"/>
+    </mappers>
+</configuration>

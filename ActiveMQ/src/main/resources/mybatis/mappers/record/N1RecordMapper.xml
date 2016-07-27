@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zjp.mq.mapper.N1RecordMapper">
+    <resultMap id="N1RecordResultMap" type="com.zjp.mq.entity.N1Record">
+        <id column="id" property="id"/>
+        <result column="message_id" property="messageId"/>
+        <result column="time_stamp" property="timeStamp"/>
+    </resultMap>
+
+    <!-- 根据消息id获取消费记录-->
+    <select id="selectN1Record" parameterType="java.lang.String" resultMap="N1RecordResultMap">
+        SELECT id,message_id,time_stamp
+        FROM n1_record
+        WHERE message_id = #{messageId}
+    </select>
+
+    <!-- 添加消费记录-->
+    <insert id="addN1Record" parameterType="com.zjp.mq.entity.N1Record">
+        INSERT INTO n1_record(message_id,time_stamp)
+        VALUES (#{messageId},#{timeStamp})
+    </insert>
+
+    <!-- 删除消费记录-->
+    <delete id="deleteN1Record" parameterType="java.util.Date">
+        DELETE FROM n1_record
+        WHERE time_stamp &lt; #{timeStamp}
+    </delete>
+</mapper>
