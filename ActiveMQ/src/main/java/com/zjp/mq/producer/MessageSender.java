@@ -1,6 +1,8 @@
 package com.zjp.mq.producer;
 
 import com.google.common.base.Preconditions;
+import com.zjp.mq.cache.impl.ProducerCache;
+import com.zjp.mq.config.BrokerConfig;
 import com.zjp.mq.config.ProducerCfg;
 import com.zjp.mq.entity.QMessage;
 import com.zjp.mq.service.QMessageService;
@@ -26,6 +28,12 @@ public class MessageSender extends ProducerCfg implements InitializingBean {
 
     @Resource(name = "QMessageService")
     private QMessageService qMessageService;
+
+    @Resource
+    private ProducerCache producerCache;
+
+    @Resource
+    private BrokerConfig brokerConfig;
 
     /**
      * 发送消息
@@ -88,6 +96,20 @@ public class MessageSender extends ProducerCfg implements InitializingBean {
         if (destName.startsWith("ack.")
                 || destName.startsWith("ACK.")) {
             throw new RuntimeException("destName must not start with ack. or ACK.");
+        }
+        //启动时初始化生产者
+        ActiveMqMessageProducer producer = producerCache.get(destName);
+        if (producer == null) {
+            producer = ActiveMqMessageProducer.builder()
+                    .brokerUrl(brokerConfig.getBrokerUrl())
+                    .userName(brokerConfig.getUserName())
+                    .password(brokerConfig.getPassword())
+                    .destName(destName)
+                    .n2(n2)
+                    .qMessageService(qMessageService)
+                    .build();
+            //加入缓存中
+            producerCache.set(destName, producer);
         }
     }
 }

@@ -26,7 +26,7 @@ public class ConsumerCfg {
     protected String destName;
 
     //是否支持事务，默认支持事务
-    protected boolean transaction = true;
+    protected boolean transaction = false;
 
     //是否支持n2级别的消息，默认不支持
     protected boolean n2 = false;
