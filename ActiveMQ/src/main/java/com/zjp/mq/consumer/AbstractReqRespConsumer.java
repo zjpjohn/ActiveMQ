@@ -32,6 +32,8 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
     private ActiveMQConnectionFactory connectionFactory;
     //消息连接
     private Connection connection;
+    //消息会话
+    private Session session;
     //消息处理线程池
     public static ExecutorService executorService;
     //内存消息队列
@@ -96,7 +98,7 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
                     //启动链接
                     connection.start();
                     //创建会话
-                    Session session = connection.createSession(transaction, ActiveMQSession.AUTO_ACKNOWLEDGE);
+                    session = connection.createSession(transaction, ActiveMQSession.AUTO_ACKNOWLEDGE);
 
                     //创建消息消费目的地
                     Destination queue = session.createQueue(destName);
@@ -138,6 +140,9 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
             log.error("handle message error: {}", e);
         } finally {
             try {
+                if (transaction) {
+                    session.commit();
+                }
                 message.acknowledge();
             } catch (JMSException e) {
                 log.error("acknowledge message error:{}", e);
