@@ -142,8 +142,9 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
             try {
                 if (transaction) {
                     session.commit();
+                } else {
+                    message.acknowledge();
                 }
-                message.acknowledge();
             } catch (JMSException e) {
                 log.error("acknowledge message error:{}", e);
             }
