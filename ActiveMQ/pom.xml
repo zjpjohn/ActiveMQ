@@ -6,7 +6,7 @@
 
     <groupId>com.qizhi.mq</groupId>
     <artifactId>activemq</artifactId>
-    <version>5.0.2-RELEASE</version>
+    <version>5.8.0-RELEASE</version>
     <properties>
         <spring.version>3.2.2.RELEASE</spring.version>
         <activeMQ.version>5.13.2</activeMQ.version>
