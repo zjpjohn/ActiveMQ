@@ -28,6 +28,8 @@ public abstract class AbsReqRespMessageProducer extends ProducerCfg implements M
     private Connection ackConnection;
     //创建线程池，进行异步发送消息
     private ExecutorService executorService;
+    //消息id异步队列
+    private BlockingQueue<String> messageIdQueue;
     //ack队列名称
     private String ackName;
 
@@ -156,7 +158,42 @@ public abstract class AbsReqRespMessageProducer extends ProducerCfg implements M
                 }
             }
         });
+
+        executorService = Executors.newSingleThreadExecutor();
+        messageIdQueue = new LinkedBlockingDeque<String>(1000);
+        executorService.submit(new Runnable() {
+            public void run() {
+                while (true) {
+                    ackMessageHandle();
+                }
+            }
+        });
     }
+
+    /**
+     * 向异步队列中添加消息，队列满是阻塞
+     *
+     * @param messageId
+     * @throws Exception
+     */
+    public void sendAckMessageToQueue(String messageId) throws Exception {
+        messageIdQueue.put(messageId);
+    }
+
+    /**
+     * 从异步队列中获取消息，没有消息是阻塞
+     *
+     * @return
+     * @throws Exception
+     */
+    public String takeAckMessage() throws Exception {
+        return messageIdQueue.take();
+    }
+
+    /**
+     * 处理回执消息业务
+     */
+    public abstract void ackMessageHandle();
 
     /**
      * 回执消息处理

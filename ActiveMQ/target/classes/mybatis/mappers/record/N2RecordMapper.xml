@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zjp.mq.mapper.N2RecordMapper">
+
+    <resultMap id="N2RecordResultMap" type="com.zjp.mq.entity.N2Record">
+        <id column="id" property="id"/>
+        <result column="business_mark" property="businessMark"/>
+        <result column="time_stamp" property="timeStamp"/>
+        <result column="dest_name" property="destName"/>
+    </resultMap>
+
+    <!-- 查询业务标识对应的记录-->
+    <select id="selectN2RecordByMark" parameterType="java.util.Map" resultMap="N2RecordResultMap">
+        SELECT id,business_mark,time_stamp,dest_name
+        FROM n2_record
+        WHERE business_mark = #{businessMark} AND dest_name=#{destName}
+    </select>
+
+    <select id="selectN2Record" parameterType="java.util.Map" resultMap="N2RecordResultMap">
+        SELECT id,business_mark,time_stamp,dest_name
+        FROM n2_record
+        WHERE business_mark = #{businessMark} and dest_name=#{destName} AND time_stamp>#{timeStamp}
+    </select>
+
+    <insert id="addN2Record" parameterType="com.zjp.mq.entity.N2Record">
+        INSERT INTO n2_record(business_mark,time_stamp,dest_name)
+        VALUES (#{businessMark},#{timeStamp},#{destName})
+    </insert>
+
+    <update id="updateN2Record" parameterType="com.zjp.mq.entity.N2Record">
+        UPDATE n2_record SET time_stamp = #{timeStamp}
+        WHERE business_mark = #{businessMark} AND dest_name=#{destName}
+    </update>
+</mapper>

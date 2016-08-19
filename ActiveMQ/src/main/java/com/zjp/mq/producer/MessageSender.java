@@ -95,6 +95,7 @@ public class MessageSender extends ProducerCfg implements InitializingBean {
         //消息队列名称不允许以ack. or ACK.开始
         if (destName.startsWith("ack.")
                 || destName.startsWith("ACK.")) {
+            log.error("destName must not start with ack. or ACK.");
             throw new RuntimeException("destName must not start with ack. or ACK.");
         }
         //启动时初始化生产者

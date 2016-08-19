@@ -31,13 +31,21 @@ public class MessageBusinessHandle {
     @Resource
     private N2RecordService n2RecordService;
 
+    /**
+     * 添加消息消费记录，并进行消息业务无处理
+     *
+     * @param messageHandle 消息业务处理器
+     * @param message       消息内容
+     * @param destName      消息地址
+     * @param n2            n2类型消息
+     */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {RuntimeException.class, Exception.class})
     public void messageHandle(MessageHandle messageHandle,
                               Map<String, String> message,
                               String destName,
                               boolean n2) {
         //获取消息中的业务数据
-        Object messageContent = message.get("data");
+        String messageContent = message.get("data");
         String messageId = message.get("messageId");
         String timeStr = message.get("timeStamp");
 
@@ -90,7 +98,7 @@ public class MessageBusinessHandle {
                                 .build());
                 //业务相关处理
                 messageHandle.handleMessage(messageContent);
-            } else if (timeStamp >n2Record.getTimeStamp()) {
+            } else if (timeStamp > n2Record.getTimeStamp()) {
                 //消费的消息的时间戳是最新，进行消息消费,否则丢弃消息
                 if (log.isDebugEnabled()) {
                     log.debug("this message is new ,update the message record...");

@@ -47,6 +47,11 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
     @Resource
     private MessageBusinessHandle messageBusinessHandle;
 
+    /**
+     * 初始化相关参数
+     *
+     * @throws Exception
+     */
     public void afterPropertiesSet() throws Exception {
         if (log.isDebugEnabled()) {
             log.debug("init consumer parameters...");
@@ -91,9 +96,9 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
                     RedeliveryPolicy policy = ((ActiveMQConnection) connection).getRedeliveryPolicy();
                     //设置重试策略
                     policy.setInitialRedeliveryDelay(1000);
-                    policy.setBackOffMultiplier(1);
+                    policy.setBackOffMultiplier(0);
                     policy.setUseExponentialBackOff(true);
-                    policy.setMaximumRedeliveries(1);
+                    policy.setMaximumRedeliveries(0);
 
                     //启动链接
                     connection.start();
@@ -170,9 +175,9 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
      * 发送确认消息
      * 对发送确认消息的异常进行处理，防止影响业务操作和消息记录操作
      *
-     * @param message 确认消息
+     * @param messageId 消息Id
      */
-    public void ackMessageSender(String message) {
+    public void ackMessageSender(String messageId) {
         Connection ackConnection = null;
         try {
             //创建回执连接
@@ -187,7 +192,7 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
             //创建消息发送者
             MessageProducer producer = ackSession.createProducer(ackQueue);
             //创建text类型的消息
-            TextMessage textMessage = ackSession.createTextMessage(message);
+            TextMessage textMessage = ackSession.createTextMessage(messageId);
             //发送消息
             log.info("send ack message to ack the message has bean handled...");
             producer.send(textMessage);

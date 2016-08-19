@@ -12,5 +12,5 @@ public interface MessageHandle {
      *
      * @param message 消息内容
      */
-    void handleMessage(Object message);
+    void handleMessage(String message);
 }

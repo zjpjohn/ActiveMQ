@@ -1,5 +1,6 @@
 package com.zjp.mq.producer;
 
+import com.google.common.base.Preconditions;
 import com.zjp.mq.service.QMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +29,30 @@ public class ActiveMqMessageProducer extends AbsReqRespMessageProducer {
     /**
      * 响应消息，说明消费消息成功，删除本地数据库消息
      *
-     * @param message 消息内容
+     * @param messageId 消息内容
      */
-    public void handleMessage(Object message) {
-        String messageId = (String) message;
-        int result = qMessageService.deleteQMessage(messageId);
-        if (result != 0) {
-            log.info("delete db message success:{}",messageId);
+    public void handleMessage(String messageId) {
+        Preconditions.checkNotNull(messageId);
+        try {
+            sendAckMessageToQueue(messageId);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 处理回执消息业务
+     */
+    @Override
+    public void ackMessageHandle() {
+        try {
+            String messageId = takeAckMessage();
+            int result = qMessageService.deleteQMessage(messageId);
+            if (result != 0) {
+                log.info("delete db message success:{}", messageId);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
 

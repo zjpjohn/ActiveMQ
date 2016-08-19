@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zjp.mq.mapper.QMessageMapper">
+
+    <resultMap id="QMessageResultMap" type="com.zjp.mq.entity.QMessage">
+        <id column="id" property="id"/>
+        <result column="message_id" property="messageId"/>
+        <result column="business_mark" property="businessMark"/>
+        <result column="message_content" property="messageContent"/>
+        <result column="status" property="status"/>
+        <result column="retry" property="retry"/>
+        <result column="destination" property="destination"/>
+        <result column="dest_type" property="destType"/>
+        <result column="time_stamp" property="timeStamp"/>
+    </resultMap>
+
+    <!-- 根据messageId查询消息-->
+    <select id="selectQMessageByMessageId" parameterType="java.lang.String" resultMap="QMessageResultMap">
+        SELECT  id,message_id,business_mark,message_content,status,retry,
+        destination,dest_type,time_stamp
+        FROM qmessage
+        WHERE  message_id = #{messageId}
+    </select>
+
+    <!-- 获取所有未消费的消息-->
+    <select id="selectAllQMessage" resultMap="QMessageResultMap">
+        SELECT  id,message_id,business_mark,message_content,status,retry,
+        destination,dest_type,time_stamp
+        FROM qmessage
+    </select>
+
+    <!-- 添加消息-->
+    <insert id="addQMessage" parameterType="com.zjp.mq.entity.QMessage">
+        <if test="businessMark!=null and businessMark!=''">
+            INSERT INTO qmessage(message_id,business_mark,status,retry,message_content,destination,
+            dest_type,time_stamp)
+            VALUES (#{messageId},#{businessMark},#{status},#{retry},
+            #{messageContent},#{destination},#{destType},#{timeStamp})
+        </if>
+        <if test="businessMark==null">
+            INSERT INTO qmessage(message_id,status,retry,message_content,destination,
+            dest_type,time_stamp)
+            VALUES (#{messageId},#{status},#{retry},#{messageContent},#{destination},
+            #{destType},#{timeStamp})
+        </if>
+    </insert>
+
+    <!--更新消息 -->
+    <update id="updateQMessage" parameterType="com.zjp.mq.entity.QMessage">
+        UPDATE qmessage SET
+        <if test="retry!=null">
+            retry = #{retry},
+        </if>
+        <if test="status!=null">
+            status=#{status}
+        </if>
+        WHERE message_id=#{messageId}
+    </update>
+
+    <!--删除消息 -->
+    <delete id="deleteQMessage" parameterType="java.lang.String">
+        DELETE
+        FROM qmessage
+        WHERE message_id = #{messageId}
+    </delete>
+</mapper>
