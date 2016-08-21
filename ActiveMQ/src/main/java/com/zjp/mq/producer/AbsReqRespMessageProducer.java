@@ -146,7 +146,6 @@ public abstract class AbsReqRespMessageProducer extends ProducerCfg implements M
         initListener.submit(new Runnable() {
             public void run() {
                 try {
-                    //创建连接工厂
                     //创建连接
                     ackConnection = connectionFactory.createConnection();
                     //创建回执消息队列名称

@@ -27,6 +27,7 @@
         SELECT  id,message_id,business_mark,message_content,status,retry,
         destination,dest_type,time_stamp
         FROM qmessage
+        ORDER BY time_stamp ASC
     </select>
 
     <!-- 添加消息-->

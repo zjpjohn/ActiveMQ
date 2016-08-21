@@ -3,7 +3,7 @@ package com.zjp.mq.producer;
 import com.google.common.base.Preconditions;
 import com.zjp.mq.cache.impl.ProducerCache;
 import com.zjp.mq.config.BrokerConfig;
-import com.zjp.mq.config.ProducerCfg;
+import com.zjp.mq.disruptor.impl.DisruptorQueue;
 import com.zjp.mq.entity.QMessage;
 import com.zjp.mq.service.QMessageService;
 import com.zjp.mq.utils.MessageHolder;
@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Map;
 
@@ -22,18 +21,21 @@ import java.util.Map;
  * time: 2016/6/28
  * copyright all reserved
  */
-public class MessageSender extends ProducerCfg implements InitializingBean {
+public class MessageSender implements InitializingBean {
 
     private static final Logger log = LoggerFactory.getLogger(MessageSender.class);
 
-    @Resource(name = "QMessageService")
     private QMessageService qMessageService;
 
-    @Resource
     private ProducerCache producerCache;
 
-    @Resource
     private BrokerConfig brokerConfig;
+
+    private DisruptorQueue disruptorQueue;
+
+    private boolean n2;
+
+    private String destName;
 
     /**
      * 发送消息
@@ -111,6 +113,80 @@ public class MessageSender extends ProducerCfg implements InitializingBean {
                     .build();
             //加入缓存中
             producerCache.set(destName, producer);
+        }
+    }
+
+    public MessageSender() {
+    }
+
+    public MessageSender(Builder builder) {
+        this.brokerConfig = builder.brokerConfig;
+        this.qMessageService = builder.qMessageService;
+        this.disruptorQueue = builder.disruptorQueue;
+        this.producerCache = builder.producerCache;
+        this.n2 = builder.n2;
+        this.destName = builder.destName;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private QMessageService qMessageService;
+
+        private ProducerCache producerCache;
+
+        private BrokerConfig brokerConfig;
+
+        private DisruptorQueue disruptorQueue;
+
+        private boolean n2;
+
+        private String destName;
+
+        public Builder() {
+        }
+
+        public Builder qMessageService(QMessageService qMessageService) {
+            this.qMessageService = qMessageService;
+            return this;
+        }
+
+        public Builder producerCache(ProducerCache producerCache) {
+            this.producerCache = producerCache;
+            return this;
+        }
+
+        public Builder brokerConfig(BrokerConfig brokerConfig) {
+            this.brokerConfig = brokerConfig;
+            return this;
+        }
+
+        public Builder disruptorQueue(DisruptorQueue disruptorQueue) {
+            this.disruptorQueue = disruptorQueue;
+            return this;
+        }
+
+        public Builder n2(boolean n2) {
+            this.n2 = n2;
+            return this;
+        }
+
+        public Builder destName(String destName) {
+            this.destName = destName;
+            return this;
+        }
+
+        public MessageSender build() {
+            MessageSender messageSender = null;
+            try {
+                messageSender = new MessageSender(this);
+                messageSender.afterPropertiesSet();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+            return messageSender;
         }
     }
 }
