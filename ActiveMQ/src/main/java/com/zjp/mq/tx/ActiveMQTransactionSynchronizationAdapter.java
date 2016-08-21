@@ -2,7 +2,6 @@ package com.zjp.mq.tx;
 
 import com.zjp.mq.disruptor.impl.DisruptorQueue;
 import com.zjp.mq.entity.QMessage;
-import com.zjp.mq.producer.MessageSender;
 import com.zjp.mq.service.QMessageService;
 import com.zjp.mq.utils.MessageHolder;
 import org.slf4j.Logger;
@@ -41,8 +40,6 @@ public class ActiveMQTransactionSynchronizationAdapter extends TransactionSynchr
 
     private static final Logger log = LoggerFactory.getLogger(ActiveMQTransactionSynchronizationAdapter.class);
 
-    private MessageSender messageSender;
-
     private QMessageService qMessageService;
 
     private DisruptorQueue disruptorQueue;
@@ -50,20 +47,10 @@ public class ActiveMQTransactionSynchronizationAdapter extends TransactionSynchr
     public ActiveMQTransactionSynchronizationAdapter() {
     }
 
-    public ActiveMQTransactionSynchronizationAdapter(MessageSender messageSender,
-                                                     QMessageService qMessageService,
+    public ActiveMQTransactionSynchronizationAdapter(QMessageService qMessageService,
                                                      DisruptorQueue disruptorQueue) {
-        this.messageSender = messageSender;
         this.qMessageService = qMessageService;
         this.disruptorQueue = disruptorQueue;
-    }
-
-    public MessageSender getMessageSender() {
-        return messageSender;
-    }
-
-    public void setMessageSender(MessageSender messageSender) {
-        this.messageSender = messageSender;
     }
 
     public QMessageService getqMessageService() {

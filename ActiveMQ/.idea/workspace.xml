@@ -85,9 +85,15 @@
       <file leaf-file-name="MessageSenderProvider.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/zjp/mq/producer/MessageSenderProvider.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.04401806">
-              <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
-              <folding />
+            <state vertical-scroll-proportion="0.6672355">
+              <caret line="69" column="52" selection-start-line="69" selection-start-column="52" selection-end-line="69" selection-end-column="52" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1549#1550#0" expanded="true" />
+                <element signature="e#1585#1586#0" expanded="true" />
+                <element signature="e#1650#1651#0" expanded="true" />
+                <element signature="e#1700#1701#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -96,7 +102,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/zjp/mq/tx/ActiveMQTransactionSynchronizationAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="90" column="21" selection-start-line="90" selection-start-column="21" selection-end-line="90" selection-end-column="21" />
+              <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -172,8 +178,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/zjp/mq/producer/AbsReqRespMessageProducer.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/zjp/mq/entity/Message.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/zjp/mq/producer/MessageSender.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/zjp/mq/producer/MessageSenderProvider.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/zjp/mq/tx/ActiveMQTransactionSynchronizationAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/zjp/mq/producer/MessageSenderProvider.java" />
       </list>
     </option>
   </component>
@@ -945,12 +951,12 @@
       <workItem from="1471428999010" duration="330000" />
       <workItem from="1471429812388" duration="1385000" />
       <workItem from="1471593667938" duration="6226000" />
-      <workItem from="1471761007609" duration="10171000" />
+      <workItem from="1471761007609" duration="12651000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="347971000" />
+    <option name="totallyTimeSpent" value="350451000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1047" extended-state="0" />
@@ -963,7 +969,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295699" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32786885" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32786885" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21182796" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
@@ -1383,7 +1389,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/zjp/mq/tx/ActiveMQTransactionSynchronizationAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="90" column="21" selection-start-line="90" selection-start-column="21" selection-end-line="90" selection-end-column="21" />
+          <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1392,9 +1398,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/zjp/mq/producer/MessageSenderProvider.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.04401806">
-          <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
-          <folding />
+        <state vertical-scroll-proportion="0.6672355">
+          <caret line="69" column="52" selection-start-line="69" selection-start-column="52" selection-end-line="69" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1549#1550#0" expanded="true" />
+            <element signature="e#1585#1586#0" expanded="true" />
+            <element signature="e#1650#1651#0" expanded="true" />
+            <element signature="e#1700#1701#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
