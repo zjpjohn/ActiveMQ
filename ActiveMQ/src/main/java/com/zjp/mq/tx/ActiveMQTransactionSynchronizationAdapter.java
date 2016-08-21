@@ -70,6 +70,11 @@ public class ActiveMQTransactionSynchronizationAdapter extends TransactionSynchr
     }
 
     @Override
+    public int getOrder() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     public void afterCompletion(int status) {
         if (STATUS_COMMITTED == status) {
             log.info("事务提交成功,向activeMQ broker 发送消息");

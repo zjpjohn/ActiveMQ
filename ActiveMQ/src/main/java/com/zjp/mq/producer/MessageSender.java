@@ -3,7 +3,6 @@ package com.zjp.mq.producer;
 import com.google.common.base.Preconditions;
 import com.zjp.mq.cache.impl.ProducerCache;
 import com.zjp.mq.config.BrokerConfig;
-import com.zjp.mq.disruptor.impl.DisruptorQueue;
 import com.zjp.mq.entity.QMessage;
 import com.zjp.mq.service.QMessageService;
 import com.zjp.mq.utils.MessageHolder;
@@ -30,8 +29,6 @@ public class MessageSender implements InitializingBean {
     private ProducerCache producerCache;
 
     private BrokerConfig brokerConfig;
-
-    private DisruptorQueue disruptorQueue;
 
     private boolean n2;
 
@@ -122,7 +119,6 @@ public class MessageSender implements InitializingBean {
     public MessageSender(Builder builder) {
         this.brokerConfig = builder.brokerConfig;
         this.qMessageService = builder.qMessageService;
-        this.disruptorQueue = builder.disruptorQueue;
         this.producerCache = builder.producerCache;
         this.n2 = builder.n2;
         this.destName = builder.destName;
@@ -138,8 +134,6 @@ public class MessageSender implements InitializingBean {
         private ProducerCache producerCache;
 
         private BrokerConfig brokerConfig;
-
-        private DisruptorQueue disruptorQueue;
 
         private boolean n2;
 
@@ -160,11 +154,6 @@ public class MessageSender implements InitializingBean {
 
         public Builder brokerConfig(BrokerConfig brokerConfig) {
             this.brokerConfig = brokerConfig;
-            return this;
-        }
-
-        public Builder disruptorQueue(DisruptorQueue disruptorQueue) {
-            this.disruptorQueue = disruptorQueue;
             return this;
         }
 

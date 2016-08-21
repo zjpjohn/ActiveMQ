@@ -30,9 +30,7 @@ public class MessageProducerSchedule {
     //每隔10分钟去发送消息
     @Scheduled(cron = "0 0/10 * * * ?")
     public void scheduleJob() {
-        if (log.isDebugEnabled()) {
-            log.debug("schedule job to send message...");
-        }
+        log.info("schedule job to send message...");
         //获取全部的消息进行发送
         List<QMessage> messages = null;
         try {

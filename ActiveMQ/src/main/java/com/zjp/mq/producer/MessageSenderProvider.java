@@ -9,6 +9,7 @@ import com.zjp.mq.tx.ActiveMQTransactionSynchronizationAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.annotation.Resource;
@@ -40,6 +41,7 @@ import java.util.Map;
  * Time: 15:13
  */
 public class MessageSenderProvider extends ProducerCfg implements InitializingBean {
+
     private static final Logger log = LoggerFactory.getLogger(MessageSender.class);
 
     @Resource(name = "QMessageService")
@@ -64,11 +66,16 @@ public class MessageSenderProvider extends ProducerCfg implements InitializingBe
         this.messageSender = messageSender;
     }
 
-    public void txSynchronize() {
-        if (TransactionSynchronizationManager.isActualTransactionActive()) {
-            TransactionSynchronizationManager.registerSynchronization(
-                    new ActiveMQTransactionSynchronizationAdapter(qMessageService, disruptorQueue));
+    /**
+     * 设置事务同步
+     */
+    private void txSynchronize() {
+        if (TransactionSynchronizationManager.hasResource(this)) {
+            return;
         }
+        TransactionSynchronization adapter = new ActiveMQTransactionSynchronizationAdapter(qMessageService, disruptorQueue);
+        TransactionSynchronizationManager.registerSynchronization(adapter);
+        TransactionSynchronizationManager.bindResource(this,Thread.currentThread().getName());
     }
 
     /**
