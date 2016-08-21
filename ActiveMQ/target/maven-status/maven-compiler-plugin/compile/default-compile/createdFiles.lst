@@ -12,8 +12,8 @@ com\zjp\mq\tx\ActiveMQTransactionSynchronizationAdapter.class
 com\zjp\mq\service\impl\N1RecordServiceImpl.class
 com\zjp\mq\disruptor\MessageEvent.class
 com\zjp\mq\utils\SpringContextHolder.class
-com\zjp\mq\disruptor\EventFactory.class
 com\zjp\mq\utils\AsyncMessageHandleCenter$1.class
+com\zjp\mq\disruptor\EventFactory.class
 com\zjp\mq\utils\MessageHolder.class
 com\zjp\mq\mapper\N2RecordMapper.class
 com\zjp\mq\producer\MessageSender.class
@@ -45,6 +45,7 @@ com\zjp\mq\utils\QMessageUtils.class
 com\zjp\mq\service\impl\N2RecordServiceImpl.class
 com\zjp\mq\config\BrokerConfig.class
 com\zjp\mq\disruptor\EventWorkHandle$Builder.class
+com\zjp\mq\tx\ActiveMQTransactionSynchronizationAdapter$1.class
 com\zjp\mq\disruptor\Disruptor.class
 com\zjp\mq\service\N2RecordService.class
 com\zjp\mq\schedule\MessageProducerSchedule.class

@@ -70,12 +70,8 @@ public class MessageSenderProvider extends ProducerCfg implements InitializingBe
      * 设置事务同步
      */
     private void txSynchronize() {
-        if (TransactionSynchronizationManager.hasResource(this)) {
-            return;
-        }
         TransactionSynchronization adapter = new ActiveMQTransactionSynchronizationAdapter(qMessageService, disruptorQueue);
         TransactionSynchronizationManager.registerSynchronization(adapter);
-        TransactionSynchronizationManager.bindResource(this,Thread.currentThread().getName());
     }
 
     /**

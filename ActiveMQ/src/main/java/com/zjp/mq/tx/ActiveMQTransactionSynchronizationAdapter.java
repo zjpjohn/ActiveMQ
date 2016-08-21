@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * ━━━━━━南无阿弥陀佛━━━━━━
@@ -44,6 +47,8 @@ public class ActiveMQTransactionSynchronizationAdapter extends TransactionSynchr
 
     private DisruptorQueue disruptorQueue;
 
+    private ExecutorService executorService;
+
     public ActiveMQTransactionSynchronizationAdapter() {
     }
 
@@ -51,6 +56,7 @@ public class ActiveMQTransactionSynchronizationAdapter extends TransactionSynchr
                                                      DisruptorQueue disruptorQueue) {
         this.qMessageService = qMessageService;
         this.disruptorQueue = disruptorQueue;
+        executorService = Executors.newSingleThreadExecutor();
     }
 
     public QMessageService getqMessageService() {
@@ -78,21 +84,23 @@ public class ActiveMQTransactionSynchronizationAdapter extends TransactionSynchr
     public void afterCompletion(int status) {
         if (STATUS_COMMITTED == status) {
             log.info("事务提交成功,向activeMQ broker 发送消息");
+            final CopyOnWriteArrayList<String> strings = new CopyOnWriteArrayList<String>(MessageHolder.get());
             //事务提交成功，向broker中发送消息
-            sendMessageToBroker();
-        } else if (STATUS_ROLLED_BACK == status) {
-            log.warn("事务提交失败,忽略消息:{}", MessageHolder.get());
-            //事务提交失败，清空内存中的数据
-            MessageHolder.remove();
+            executorService.execute(new Runnable() {
+                public void run() {
+                    sendMessageToBroker(strings);
+                }
+            });
         }
+        log.info("清空当前线程中缓存的消息...");
+        MessageHolder.remove();
     }
 
     /**
      * 向broker中发送消息
      */
-    private void sendMessageToBroker() {
+    private void sendMessageToBroker(List<String> list) {
         try {
-            List<String> list = MessageHolder.get();
             if (list == null || list.size() == 0) {
                 return;
             }
@@ -116,9 +124,6 @@ public class ActiveMQTransactionSynchronizationAdapter extends TransactionSynchr
             }
         } catch (Exception e) {
             log.error("send message error: {}", e);
-        } finally {
-            //清除数据，减小内存占用
-            MessageHolder.remove();
         }
     }
 }
