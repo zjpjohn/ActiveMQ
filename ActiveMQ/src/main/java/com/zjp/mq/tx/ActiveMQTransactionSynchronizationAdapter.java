@@ -83,7 +83,7 @@ public class ActiveMQTransactionSynchronizationAdapter extends TransactionSynchr
     @Override
     public void afterCompletion(int status) {
         if (STATUS_COMMITTED == status) {
-            log.info("事务提交成功,向activeMQ broker 发送消息");
+            log.info("事务提交成功后,向activeMQ broker 发送消息");
             final CopyOnWriteArrayList<String> strings = new CopyOnWriteArrayList<String>(MessageHolder.get());
             //事务提交成功，向broker中发送消息
             executorService.execute(new Runnable() {
@@ -92,7 +92,9 @@ public class ActiveMQTransactionSynchronizationAdapter extends TransactionSynchr
                 }
             });
         }
-        log.info("清空当前线程中缓存的消息...");
+        if (STATUS_ROLLED_BACK == status) {
+            log.info("事务提交失败，数据库回滚后，清空缓存中的消息：{}", MessageHolder.get());
+        }
         MessageHolder.remove();
     }
 
