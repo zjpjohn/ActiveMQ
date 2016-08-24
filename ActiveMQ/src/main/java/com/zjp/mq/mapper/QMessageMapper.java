@@ -46,5 +46,5 @@ public interface QMessageMapper {
      *
      * @return
      */
-    List<QMessage> selectAllQMessage();
+    List<QMessage> selectAllQMessage(Long currentTime);
 }

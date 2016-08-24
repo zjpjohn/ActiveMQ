@@ -34,7 +34,7 @@ public class MessageProducerSchedule {
         //获取全部的消息进行发送
         List<QMessage> messages = null;
         try {
-            messages = qMessageService.selectAllQMessage();
+            messages = qMessageService.selectAllQMessage(System.currentTimeMillis());
         } catch (Exception e) {
             log.error("query unconsumed message error:{}", e);
         }

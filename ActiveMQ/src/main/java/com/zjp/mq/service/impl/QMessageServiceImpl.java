@@ -40,7 +40,7 @@ public class QMessageServiceImpl implements QMessageService {
      *
      * @param qMessage
      */
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public int addQMessage(QMessage qMessage) {
         if (qMessage == null) {
             return 0;
@@ -53,7 +53,7 @@ public class QMessageServiceImpl implements QMessageService {
      *
      * @param qMessage
      */
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public int updateQMessage(QMessage qMessage) {
         if (qMessage == null) {
             return 0;
@@ -66,7 +66,7 @@ public class QMessageServiceImpl implements QMessageService {
      *
      * @param messageId
      */
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public int deleteQMessage(String messageId) {
         if (StringUtils.isBlank(messageId)) {
             return 0;
@@ -79,7 +79,7 @@ public class QMessageServiceImpl implements QMessageService {
      *
      * @return
      */
-    public List<QMessage> selectAllQMessage() {
-        return qMessageMapper.selectAllQMessage();
+    public List<QMessage> selectAllQMessage(Long currentTime) {
+        return qMessageMapper.selectAllQMessage(currentTime);
     }
 }

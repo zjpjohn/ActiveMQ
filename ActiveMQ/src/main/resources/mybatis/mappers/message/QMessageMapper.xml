@@ -23,10 +23,11 @@
     </select>
 
     <!-- 获取所有未消费的消息-->
-    <select id="selectAllQMessage" resultMap="QMessageResultMap">
-        SELECT  id,message_id,business_mark,message_content,status,retry,
+    <select id="selectAllQMessage" resultMap="QMessageResultMap" parameterType="java.lang.Long">
+        SELECT id,message_id,business_mark,message_content,status,retry,
         destination,dest_type,time_stamp
         FROM qmessage
+        WHERE time_stamp<#{currentTime}-2000
         ORDER BY time_stamp ASC
     </select>
 

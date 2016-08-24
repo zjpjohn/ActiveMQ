@@ -61,7 +61,7 @@ public class QMessageMapperImpl implements QMessageMapper {
      *
      * @return
      */
-    public List<QMessage> selectAllQMessage() {
-        return sqlSession.selectList("com.zjp.mq.mapper.QMessageMapper.selectAllQMessage");
+    public List<QMessage> selectAllQMessage(Long currentTime) {
+        return sqlSession.selectList("com.zjp.mq.mapper.QMessageMapper.selectAllQMessage", currentTime);
     }
 }
