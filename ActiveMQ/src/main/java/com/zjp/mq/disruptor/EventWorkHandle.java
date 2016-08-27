@@ -4,7 +4,7 @@ import com.lmax.disruptor.WorkHandler;
 import com.zjp.mq.cache.impl.ProducerCache;
 import com.zjp.mq.config.BrokerConfig;
 import com.zjp.mq.entity.QMessage;
-import com.zjp.mq.producer.ActiveMqMessageProducer;
+import com.zjp.mq.producer.ActiveMQTxMessageProducer;
 import com.zjp.mq.service.QMessageService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -94,10 +94,10 @@ public class EventWorkHandle implements WorkHandler<MessageEvent> {
         //获取消息内容
         QMessage message = event.getqMessage();
         //从缓存中获取activeMQ生产者
-        ActiveMqMessageProducer producer = producerCache.get(message.getDestination());
+        ActiveMQTxMessageProducer producer = producerCache.get(message.getDestination());
         if (producer == null) {
             //如果为空,创建
-            producer = ActiveMqMessageProducer.builder()
+            producer = ActiveMQTxMessageProducer.builder()
                     .brokerUrl(brokerConfig.getBrokerUrl())
                     .userName(brokerConfig.getUserName())
                     .password(brokerConfig.getPassword())

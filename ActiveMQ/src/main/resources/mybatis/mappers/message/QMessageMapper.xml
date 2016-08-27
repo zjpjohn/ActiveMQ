@@ -27,7 +27,7 @@
         SELECT id,message_id,business_mark,message_content,status,retry,
         destination,dest_type,time_stamp
         FROM qmessage
-        WHERE time_stamp<#{currentTime}-2000
+        WHERE time_stamp &lt;#{currentTime}-2000
         ORDER BY time_stamp ASC
     </select>
 

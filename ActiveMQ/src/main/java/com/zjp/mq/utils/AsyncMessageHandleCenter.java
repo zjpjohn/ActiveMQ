@@ -3,7 +3,7 @@ package com.zjp.mq.utils;
 import com.zjp.mq.cache.impl.ProducerCache;
 import com.zjp.mq.config.BrokerConfig;
 import com.zjp.mq.entity.QMessage;
-import com.zjp.mq.producer.ActiveMqMessageProducer;
+import com.zjp.mq.producer.ActiveMQTxMessageProducer;
 import com.zjp.mq.producer.AsyncMessageQueue;
 import com.zjp.mq.service.QMessageService;
 import org.apache.commons.lang3.StringUtils;
@@ -47,10 +47,10 @@ public class AsyncMessageHandleCenter implements InitializingBean {
                 while (true) {
                     try {
                         QMessage message = AsyncMessageQueue.receiveMessage();
-                        ActiveMqMessageProducer producer = producerCache.get(message.getDestination());
+                        ActiveMQTxMessageProducer producer = producerCache.get(message.getDestination());
                         //如果生产者为空，，则创建生产者
                         if (producer == null) {
-                            producer = ActiveMqMessageProducer.builder()
+                            producer = ActiveMQTxMessageProducer.builder()
                                     .brokerUrl(brokerConfig.getBrokerUrl())
                                     .userName(brokerConfig.getUserName())
                                     .password(brokerConfig.getPassword())

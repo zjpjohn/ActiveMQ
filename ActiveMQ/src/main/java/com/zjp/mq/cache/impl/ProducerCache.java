@@ -1,7 +1,7 @@
 package com.zjp.mq.cache.impl;
 
 import com.zjp.mq.cache.CacheService;
-import com.zjp.mq.producer.ActiveMqMessageProducer;
+import com.zjp.mq.producer.ActiveMQTxMessageProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -15,14 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * copyright all reserved
  */
 @Component
-public class ProducerCache implements CacheService<String, ActiveMqMessageProducer> {
+public class ProducerCache implements CacheService<String, ActiveMQTxMessageProducer> {
 
     private static final Logger log = LoggerFactory.getLogger(ProducerCache.class);
 
-    private Map<String, ActiveMqMessageProducer> cacheDB;
+    private Map<String, ActiveMQTxMessageProducer> cacheDB;
 
     public ProducerCache() {
-        cacheDB = new ConcurrentHashMap<String, ActiveMqMessageProducer>();
+        cacheDB = new ConcurrentHashMap<String, ActiveMQTxMessageProducer>();
     }
 
     /**
@@ -32,7 +32,7 @@ public class ProducerCache implements CacheService<String, ActiveMqMessageProduc
      * @param value 缓存值
      * @return
      */
-    public boolean set(String key, ActiveMqMessageProducer value) {
+    public boolean set(String key, ActiveMQTxMessageProducer value) {
         if (key == null || value == null) {
             log.error("param exception,add cache faile");
             return false;
@@ -52,12 +52,12 @@ public class ProducerCache implements CacheService<String, ActiveMqMessageProduc
      * @param key 缓存键
      * @return
      */
-    public ActiveMqMessageProducer get(String key) {
+    public ActiveMQTxMessageProducer get(String key) {
         if (key == null) {
             log.warn("key must not be null");
             return null;
         }
-        ActiveMqMessageProducer value = null;
+        ActiveMQTxMessageProducer value = null;
         try {
             value = cacheDB.get(key);
         } catch (Exception e) {

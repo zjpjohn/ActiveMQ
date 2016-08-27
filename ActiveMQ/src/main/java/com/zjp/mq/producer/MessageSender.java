@@ -98,9 +98,9 @@ public class MessageSender implements InitializingBean {
             throw new RuntimeException("destName must not start with ack. or ACK.");
         }
         //启动时初始化生产者
-        ActiveMqMessageProducer producer = producerCache.get(destName);
+        ActiveMQTxMessageProducer producer = producerCache.get(destName);
         if (producer == null) {
-            producer = ActiveMqMessageProducer.builder()
+            producer = ActiveMQTxMessageProducer.builder()
                     .brokerUrl(brokerConfig.getBrokerUrl())
                     .userName(brokerConfig.getUserName())
                     .password(brokerConfig.getPassword())

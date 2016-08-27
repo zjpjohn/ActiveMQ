@@ -38,8 +38,6 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
     public static ExecutorService executorService;
     //内存消息队列
     private LinkedBlockingQueue<Map<String, String>> messageStore;
-    //消息ack队列
-    private String ackName;
 
     @Resource
     private BrokerConfig brokerConfig;
@@ -56,18 +54,12 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
         if (log.isDebugEnabled()) {
             log.debug("init consumer parameters...");
         }
-        //消息队列名称ack or ACK 为保留字段，不允许以此开始
-        if (destName.startsWith("ack.")
-                || destName.startsWith("ACK.")) {
-            throw new RuntimeException(destName + "destName must not start with ack. or ACK.");
-        }
-        //创建回执消息队列名称，以ack. or ACK.开始
-        ackName = "ack." + destName;
+
         //创建内存队列
         messageStore = new LinkedBlockingQueue<Map<String, String>>(10000);
         //创建线程池
         executorService = Executors.newSingleThreadExecutor();
-
+        //异步处理消息
         executorService.submit(new Runnable() {
             public void run() {
                 while (true) {
@@ -96,9 +88,9 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
                     RedeliveryPolicy policy = ((ActiveMQConnection) connection).getRedeliveryPolicy();
                     //设置重试策略
                     policy.setInitialRedeliveryDelay(1000);
-                    policy.setBackOffMultiplier(0);
+                    policy.setBackOffMultiplier(2);
                     policy.setUseExponentialBackOff(true);
-                    policy.setMaximumRedeliveries(0);
+                    policy.setMaximumRedeliveries(2);
 
                     //启动链接
                     connection.start();
@@ -125,9 +117,8 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
      */
     public void onMessage(Message message) {
         try {
-            //创建回执消息
+            //创建消息
             MapMessage mapMessage = (MapMessage) message;
-
             //回去消息id，判断消息是否有效
             String messageId = mapMessage.getString("messageId");
             //消息有效进行处理
@@ -139,7 +130,6 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
                 map.put("timeStamp", mapMessage.getString("timeStamp"));
                 //进行业务处理
                 messageStore.put(map);
-
             }
         } catch (Exception e) {
             log.error("handle message error: {}", e);
@@ -163,50 +153,8 @@ public abstract class AbstractReqRespConsumer extends ConsumerCfg implements Mes
      * @param message 消息
      */
     public synchronized void messageHandle(Map<String, String> message) throws Exception {
-
-        String messageId = message.get("messageId");
         //进行消息的业务处理
         messageBusinessHandle.messageHandle(this, message, destName, n2);
-        //发送回执消息
-        ackMessageSender(messageId);
-    }
-
-    /**
-     * 发送确认消息
-     * 对发送确认消息的异常进行处理，防止影响业务操作和消息记录操作
-     *
-     * @param messageId 消息Id
-     */
-    public void ackMessageSender(String messageId) {
-        Connection ackConnection = null;
-        try {
-            //创建回执连接
-            ackConnection = connectionFactory.createConnection();
-
-            //打开回执连接
-            ackConnection.start();
-            //创建连接会话
-            Session ackSession = ackConnection.createSession(Boolean.FALSE, ActiveMQSession.AUTO_ACKNOWLEDGE);
-            //创建回执消息投送目的地
-            Destination ackQueue = ackSession.createQueue(ackName);
-            //创建消息发送者
-            MessageProducer producer = ackSession.createProducer(ackQueue);
-            //创建text类型的消息
-            TextMessage textMessage = ackSession.createTextMessage(messageId);
-            //发送消息
-            log.info("send ack message to ack the message has bean handled...");
-            producer.send(textMessage);
-        } catch (Exception e) {
-            log.error("send callback message error: {}", e);
-        } finally {
-            if (ackConnection != null) {
-                try {
-                    ackConnection.close();
-                } catch (JMSException e) {
-                    log.error("close connection error：{}", e);
-                }
-            }
-        }
     }
 
     /**
