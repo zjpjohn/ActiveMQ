@@ -8,7 +8,7 @@
     <artifactId>activemq</artifactId>
     <version>5.8.0-RELEASE</version>
     <properties>
-        <spring.version>3.2.2.RELEASE</spring.version>
+        <spring.version>5.3.18</spring.version>
         <activeMQ.version>5.13.2</activeMQ.version>
     </properties>
     <dependencies>
